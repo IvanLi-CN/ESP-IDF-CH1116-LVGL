@@ -220,12 +220,11 @@ static esp_err_t ch1116_draw_bitmap(int x_start, int y_start, int x_end,
   uint8_t *color_data_ptr = (uint8_t *)color_data;
   uint16_t page_data_size = (x_end - x_start + 1);
 
-  // ESP_LOGI(CH1116_TAG, "page_start: %d, page_end: %d", page_start, page_end);
+  // ESP_LOGI(CH1116_TAG, "y_start: %d, y_end: %d, page_start: %d, page_end:
+  // %d",
+  //          y_start, y_end, page_start, page_end);
   // ESP_LOGI(CH1116_TAG, "x_start: %d, x_end: %d, page_data_size: %d", x_start,
   //          x_end, page_data_size);
-  // ESP_LOG_BUFFER_HEXDUMP(CH1116_TAG, color_data,
-  //                        (page_end - page_start + 1) * page_data_size,
-  //                        ESP_LOG_INFO);
 
   for (int page = page_start; page <= page_end; page++) {
     cmd = i2c_cmd_link_create();
@@ -235,9 +234,9 @@ static esp_err_t ch1116_draw_bitmap(int x_start, int y_start, int x_end,
 
     // set cursor position
     i2c_master_write_byte(cmd, CH1116_CONTROL_BYTE_COMMAND_STREAM, true);
-    i2c_master_write_byte(
-        cmd, CH1116_LOWER_COLUMN_ADDRESS | (page_start & 0x0f), true);
-    i2c_master_write_byte(cmd, CH1116_HIGHER_COLUMN_ADDRESS | (page_start >> 4),
+    i2c_master_write_byte(cmd, CH1116_LOWER_COLUMN_ADDRESS | (x_start & 0x0f),
+                          true);
+    i2c_master_write_byte(cmd, CH1116_HIGHER_COLUMN_ADDRESS | (x_start >> 4),
                           true);
     i2c_master_write_byte(cmd, CH1116_PAGE_ADDRESS | (page & 0x0f), true);
 
@@ -262,6 +261,10 @@ static esp_err_t ch1116_draw_bitmap(int x_start, int y_start, int x_end,
     i2c_master_stop(cmd);
 
     err = i2c_master_cmd_begin(I2C_NUM_0, cmd, 10 / portTICK_PERIOD_MS);
+
+    // ESP_LOG_BUFFER_HEXDUMP(CH1116_TAG, color_data_ptr, page_data_size,
+    //                        ESP_LOG_INFO);
+
     color_data_ptr += page_data_size;
 
     if (err != ESP_OK) {

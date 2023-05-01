@@ -83,12 +83,12 @@ void gui_main(void) {
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least
   // 1/10 screen sized
-  lv_color_t *buf1 = malloc(EXAMPLE_LCD_H_RES * 24 * sizeof(lv_color_t));
+  lv_color_t *buf1 = malloc(EXAMPLE_LCD_H_RES * 20 * sizeof(lv_color_t));
   assert(buf1);
-  lv_color_t *buf2 = malloc(EXAMPLE_LCD_H_RES * 24 * sizeof(lv_color_t));
+  lv_color_t *buf2 = malloc(EXAMPLE_LCD_H_RES * 20 * sizeof(lv_color_t));
   assert(buf2);
   // initialize LVGL draw buffers
-  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, EXAMPLE_LCD_H_RES * 24);
+  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, EXAMPLE_LCD_H_RES * 20);
 
   ESP_LOGI(TAG, "Register display driver to LVGL");
   lv_disp_drv_init(&disp_drv);
@@ -96,7 +96,7 @@ void gui_main(void) {
   disp_drv.ver_res = EXAMPLE_LCD_V_RES;
   disp_drv.flush_cb = example_lvgl_flush_cb;
   disp_drv.draw_buf = &disp_buf;
-  // disp_drv.rounder_cb = example_lvgl_rounder;
+  disp_drv.rounder_cb = example_lvgl_rounder;
   disp_drv.set_px_cb = example_lvgl_set_px_cb;
   lv_disp_t *disp = lv_disp_drv_register(&disp_drv);
 
