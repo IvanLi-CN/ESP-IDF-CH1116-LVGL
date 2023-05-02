@@ -3,7 +3,7 @@
 
 # CH1116 OLED With LVGL in ESP-IDF Example
 
-Project rewritten from [I2C OLED example (ESP-IDF v5.0)](https://github.com/espressif/esp-idf/tree/release/v5.0/examples/peripherals/lcd/i2c_oled)
+Project rewritten and simplification from [I2C OLED example (ESP-IDF v5.0)](https://github.com/espressif/esp-idf/tree/release/v5.0/examples/peripherals/lcd/i2c_oled)
 
 This example shows how to make use of the CH1116 panel driver from `esp_lcd` component to facilitate the porting of LVGL library. In the end, example will display a scrolling text on the OLED screen.
 
