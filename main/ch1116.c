@@ -14,14 +14,13 @@
 #define SDA_PIN GPIO_NUM_4
 #define SCL_PIN GPIO_NUM_5
 
-// CH1116
-
 #define CH1116_WIDTH 128
 #define CH1116_HEIGHT 64
 
-#define CH1116_ADDRESS 0x3C
+#define CH1116_ADDRESS 0x3C  // 011110+SA0 - 0x3C or 0x3D
 
 // CH1116 Control
+
 #define CH1116_CONTROL_BYTE_COMMAND_SINGLE 0x80
 #define CH1116_CONTROL_BYTE_COMMAND_STREAM 0x00
 #define CH1116_CONTROL_BYTE_DATA_SINGLE 0xC0
@@ -72,11 +71,6 @@
 #define CH1116_SET_VCOMH_1 0x40  // #24
 
 #define CH1116_DISPLAY_ON 0xAF  // #13
-
-// CH1116 Data Commands
-
-#define CH1116_CONTROL_BYTE_DATA_SINGLE 0x80  // #4
-#define CH1116_CONTROL_BYTE_DATA_STREAM 0x40  // #4
 
 void i2c_master_init() {
   i2c_config_t i2c_config = {.mode = I2C_MODE_MASTER,

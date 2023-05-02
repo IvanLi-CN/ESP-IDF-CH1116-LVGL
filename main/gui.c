@@ -15,7 +15,7 @@
 #include "freertos/task.h"
 #include "lvgl.h"
 
-static const char *TAG = "LVGL_DEMO_UI";
+static const char *GUI_TAG = "LVGL_GUI";
 
 #define I2C_HOST 0
 
@@ -31,13 +31,6 @@ static const char *TAG = "LVGL_DEMO_UI";
 #define EXAMPLE_LVGL_TICK_PERIOD_MS 2
 
 extern void example_lvgl_demo_ui(lv_disp_t *disp);
-
-static bool example_notify_lvgl_flush_ready(void *panel_io, void *edata,
-                                            void *user_ctx) {
-  lv_disp_drv_t *disp_driver = (lv_disp_drv_t *)user_ctx;
-  lv_disp_flush_ready(disp_driver);
-  return false;
-}
 
 static void example_lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area,
                                   lv_color_t *color_map) {
@@ -78,7 +71,7 @@ void gui_main(void) {
       disp_buf;  // contains internal graphic buffer(s) called draw buffer(s)
   static lv_disp_drv_t disp_drv;  // contains callback functions
 
-  ESP_LOGI(TAG, "Initialize LVGL library");
+  ESP_LOGI(GUI_TAG, "Initialize LVGL library");
   lv_init();
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least
@@ -90,7 +83,7 @@ void gui_main(void) {
   // initialize LVGL draw buffers
   lv_disp_draw_buf_init(&disp_buf, buf1, buf2, EXAMPLE_LCD_H_RES * 20);
 
-  ESP_LOGI(TAG, "Register display driver to LVGL");
+  ESP_LOGI(GUI_TAG, "Register display driver to LVGL");
   lv_disp_drv_init(&disp_drv);
   disp_drv.hor_res = EXAMPLE_LCD_H_RES;
   disp_drv.ver_res = EXAMPLE_LCD_V_RES;
@@ -100,7 +93,7 @@ void gui_main(void) {
   disp_drv.set_px_cb = example_lvgl_set_px_cb;
   lv_disp_t *disp = lv_disp_drv_register(&disp_drv);
 
-  ESP_LOGI(TAG, "Install LVGL tick timer");
+  ESP_LOGI(GUI_TAG, "Install LVGL tick timer");
   // Tick interface for LVGL (using esp_timer to generate 2ms periodic event)
   const esp_timer_create_args_t lvgl_tick_timer_args = {
       .callback = &example_increase_lvgl_tick, .name = "lvgl_tick"};
@@ -109,7 +102,7 @@ void gui_main(void) {
   ESP_ERROR_CHECK(esp_timer_start_periodic(lvgl_tick_timer,
                                            EXAMPLE_LVGL_TICK_PERIOD_MS * 1000));
 
-  ESP_LOGI(TAG, "Display LVGL Scroll Text");
+  ESP_LOGI(GUI_TAG, "Display LVGL Scroll Text");
   example_lvgl_demo_ui(disp);
 
   while (1) {
